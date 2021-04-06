@@ -20,16 +20,41 @@ class MainVCPresenter {
     }
     
     func setData() {
-        network.requestAndGetData { [weak self] result in
+        DispatchQueue.main.async {
+            
+            self.network.requestAndGetData { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let truckers):
-                self.view.setData(truckers!)
+                guard let truckers = truckers else {
+                    print("ERROR")
+                    return
+                }
+                self.view.setData(truckers)
             case .failure( _):
                 print("ERROR")
+            }
             }
         }
     }
     
+    func pagination(byPage page: Int) {
+        DispatchQueue.main.async {
+            self.network.pagination(byPage: page) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case.success(let truckers):
+                    guard let truckers = truckers else {
+                        print("ERROR")
+                        return
+                    }
+                    self.view.setData(truckers)
+                case .failure( _):
+                    print("ERROR")
+                }
+            }
+        }
+    }
 }

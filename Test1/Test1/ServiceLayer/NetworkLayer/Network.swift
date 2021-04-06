@@ -21,8 +21,13 @@ class Network {
                     print(error)
                 }
 
+                guard let data = data else {
+                    print("ERROR")
+                    return
+                }
+                
                 do {
-                    let data = try? JSONDecoder().decode(BugTruckers.self, from: data!)
+                    let data = try JSONDecoder().decode(BugTruckers.self, from: data)
                     completion(.success(data))
                 } catch {
                     completion(.failure(error))
@@ -43,8 +48,39 @@ class Network {
                 print(error)
             }
             
+            guard let data = data else {
+                print("ERROR")
+                return
+            }
+            
             do {
-                let data = try? JSONDecoder().decode(TruckerDetail.self, from: data!)
+                let data = try? JSONDecoder().decode(TruckerDetail.self, from: data)
+                completion(.success(data))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
+    
+    func pagination(byPage page: Int, completion: @escaping (Result<BugTruckers?, Error>) -> Void) {
+        let stringUrl = "https://lk.ellco.ru:8000/bug_tracker/?page=\(page)"
+        guard let url = URL(string: stringUrl) else { return }
+        
+        
+        let task = URLSession.shared.dataTask(with: createRequest(url)) { (data, response, error) in
+            
+            if let error = error {
+                print(error)
+            }
+            
+            guard let data = data else {
+                print("ERROR")
+                return
+            }
+            
+            do {
+                let data = try? JSONDecoder().decode(BugTruckers.self, from: data)
                 completion(.success(data))
             } catch {
                 completion(.failure(error))

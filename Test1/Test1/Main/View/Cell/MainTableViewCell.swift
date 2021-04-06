@@ -16,12 +16,14 @@ class MainTableViewCell: UITableViewCell {
     private var name: String = "" {
         didSet {
             nameLabel.text = name
+            nameLabel.textColor = UIColor(red: 2/255, green: 119/255, blue: 189/255, alpha: 1)
         }
     }
     
     private var issueDescription: String = "" {
         didSet {
             descriptionLabel.text = issueDescription
+            descriptionLabel.textColor = UIColor(red: 50/255, green: 119/255, blue: 189/255, alpha: 1)
         }
     }
 
